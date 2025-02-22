@@ -1,5 +1,5 @@
 const BASE_URL =
-  import.meta.env.VITE_BASE_URL || "http://localhost:5000/api/v1";
+  import.meta.env.VITE_BASE_URL || "https://cultflow-mern.onrender.com/api/v1";
 
 // AUTH ENDPOINTS
 export const endpoints = {

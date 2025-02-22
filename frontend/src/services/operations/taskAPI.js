@@ -5,7 +5,8 @@ import { logout } from "./authAPI";
 import { setLoading, setUser } from "../../slices/profileSlice";
 
 const BASE_URL =
-  import.meta.env.VITE_BASE_URL || "http://localhost:5000/api/v1";
+  import.meta.env.VITE_BASE_URL || "https://cultflow-mern.onrender.com/api/v1";
+
 
 // TASK ENDPOINTS
 export const taskEndpoints = {
