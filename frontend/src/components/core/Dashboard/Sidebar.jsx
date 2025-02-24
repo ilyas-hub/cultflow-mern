@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { VscSignOut } from "react-icons/vsc";
+import { VscSignOut, VscMenu } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -8,8 +8,10 @@ import { logout } from "../../../services/operations/authAPI";
 import ConfirmationModal from "../../Common/ConfirmationModal";
 import SidebarLink from "./SidebarLink";
 
-export default function Sidebar() {
-  const { user, loading: profileLoading } = useSelector((state) => state.profile);
+export default function Sidebar({ isOpen, toggleSidebar }) {
+  const { user, loading: profileLoading } = useSelector(
+    (state) => state.profile
+  );
   const { loading: authLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,7 +19,7 @@ export default function Sidebar() {
 
   if (profileLoading || authLoading) {
     return (
-      <div className="grid h-[calc(100vh-3.5rem)] min-w-[220px] items-center border-r-[1px] border-r-richblack-700 bg-richblack-800">
+      <div className="grid h-[calc(100vh-3.5rem)] min-w-[220px] items-center border-r border-richblack-700 bg-richblack-800">
         <div className="spinner"></div>
       </div>
     );
@@ -25,20 +27,37 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className="flex h-[calc(100vh-3.5rem)] min-w-[220px] flex-col border-r-[1px] border-r-richblack-700 bg-richblack-800 py-10">
-        <div className="flex flex-col">
-          {sidebarLinks.map((link) => {
-            // ✅ FIX: Properly check for 'type' field and handle both array and string cases
-            if (link.type) {
-              if (Array.isArray(link.type) && !link.type.includes(user?.accountType)) return null;
-              if (!Array.isArray(link.type) && user?.accountType !== link.type) return null;
-            }
+      <div
+        className={`fixed top-0 left-0 z-50 h-full w-64 transform border-r border-richblack-700 bg-richblack-800 py-10 transition-transform duration-300 ease-in-out
+        ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:static lg:translate-x-0`}
+      >
+        <button
+          onClick={toggleSidebar}
+          className="absolute right-4 top-4 text-richblack-300 lg:hidden"
+        >
+          ✕
+        </button>
 
-            return <SidebarLink key={link.id} link={link} iconName={link.icon} />;
+        <div className="flex flex-col gap-y-4">
+          {sidebarLinks.map((link) => {
+            if (link.type) {
+              if (
+                Array.isArray(link.type) &&
+                !link.type.includes(user?.accountType)
+              )
+                return null;
+              if (!Array.isArray(link.type) && user?.accountType !== link.type)
+                return null;
+            }
+            return (
+              <SidebarLink key={link.id} link={link} iconName={link.icon} />
+            );
           })}
         </div>
 
-        <div className="mx-auto mt-6 mb-6 h-[1px] w-10/12 bg-richblack-700" />
+        <div className="mx-auto my-6 h-[1px] w-10/12 bg-richblack-700" />
 
         <div className="flex flex-col">
           <SidebarLink
@@ -65,6 +84,7 @@ export default function Sidebar() {
           </button>
         </div>
       </div>
+
       {confirmationModal && <ConfirmationModal modalData={confirmationModal} />}
     </>
   );
