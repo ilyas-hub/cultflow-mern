@@ -13,15 +13,22 @@ function Dashboard() {
 
   if (profileLoading || authLoading) {
     return (
-      <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
+      <div className="grid flex-grow place-items-center">
         <div className="spinner"></div>
       </div>
     );
   }
 
   return (
-    <div className="relative flex min-h-[calc(100vh-3.5rem)]">
-      {/* Hamburger Menu - Mobile Only */}
+    <div className="relative flex flex-grow">
+      <div
+        className={`absolute inset-y-0 left-0 w-64 bg-richblack-800 transition-transform lg:relative lg:translate-x-0 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      </div>
+
       <button
         onClick={toggleSidebar}
         className="absolute left-4 top-4 z-50 rounded-lg p-2 text-2xl text-richblack-300 lg:hidden"
@@ -29,9 +36,7 @@ function Dashboard() {
         <BsGrid3X3Gap />
       </button>
 
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-
-      <div className="h-[calc(100vh-3.5rem)] flex-1 overflow-auto bg-richblack-900">
+      <div className="flex-1 overflow-auto bg-richblack-900 p-4">
         <div className="mx-auto w-11/12 max-w-[1000px] py-10">
           <Outlet />
         </div>

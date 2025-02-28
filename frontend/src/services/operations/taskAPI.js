@@ -17,6 +17,7 @@ export const taskEndpoints = {
   DELETE_TASK_API: `${BASE_URL}/tasks/deleteTask`,
   GET_USER_DETAILS_API: `${BASE_URL}/tasks/getUserDetails`,
   GET_ALL_TASKS_ADMIN_API: `${BASE_URL}/tasks/admin/getAllTasksForAdmin`,
+  SEARCH_TASKS_API: `${BASE_URL}/tasks/search`,
 };
 
 // Fetch all tasks
@@ -108,7 +109,7 @@ export const updateTask = async (token, taskId, updatedData) => {
       updatedData,
       { Authorization: `Bearer ${token}` }
     );
-    return response.data;
+    return response.data; 
   } catch (error) {
     console.error("Error updating task:", error);
     return {
@@ -165,4 +166,23 @@ export const getUserDetails = (token, navigate) => {
       dispatch(setLoading(false));
     }
   };
+};
+
+// Search tasks
+export const searchTasks = async (token, query) => {
+  try {
+    const response = await apiConnector(
+      "GET",
+      `${taskEndpoints.SEARCH_TASKS_API}?query=${encodeURIComponent(query)}`,
+      null,
+      { Authorization: `Bearer ${token}` }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error searching tasks:", error);
+    return {
+      success: false,
+      message: error.response?.data?.message || "Search failed.",
+    };
+  }
 };

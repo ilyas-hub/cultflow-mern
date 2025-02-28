@@ -58,7 +58,7 @@ exports.signup = async (req, res) => {
       message: "User registered successfully",
     });
   } catch (error) {
-    console.error(error);
+  
     return res.status(500).json({
       success: false,
       message: "User cannot be registered. Please try again.",
@@ -126,7 +126,7 @@ exports.login = async (req, res) => {
       message: "User login successful.",
     });
   } catch (error) {
-    console.error("Login Error:", error);
+    
     return res.status(500).json({
       success: false,
       message: "Login failed. Please try again.",
@@ -219,8 +219,7 @@ exports.changePassword = async (req, res) => {
         )
       );
     } catch (error) {
-      // If there's an error sending the email, log the error and return a 500 (Internal Server Error) error
-      console.error("Error occurred while sending email:", error);
+    
       return res.status(500).json({
         success: false,
         message: "Error occurred while sending email",
@@ -233,8 +232,7 @@ exports.changePassword = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Password updated successfully" });
   } catch (error) {
-    // If there's an error updating the password, log the error and return a 500 (Internal Server Error) error
-    console.error("Error occurred while updating password:", error);
+   
     return res.status(500).json({
       success: false,
       message: "Error occurred while updating password",

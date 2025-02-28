@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { io } from "socket.io-client";
+const socket = io(import.meta.env.VITE_BACKEND_URL);
 
 const TaskForm = ({ onSubmit, initialData = {}, buttonLabel }) => {
   const [taskData, setTaskData] = useState({
@@ -8,20 +10,22 @@ const TaskForm = ({ onSubmit, initialData = {}, buttonLabel }) => {
     completed: false,
   });
 
-  
   useEffect(() => {
     if (initialData && Object.keys(initialData).length > 0) {
       setTaskData((prev) => {
         if (
           prev.title !== (initialData.title || "") ||
           prev.description !== (initialData.description || "") ||
-          prev.dueDate !== (initialData.dueDate ? initialData.dueDate.slice(0, 10) : "") ||
+          prev.dueDate !==
+            (initialData.dueDate ? initialData.dueDate.slice(0, 10) : "") ||
           prev.completed !== Boolean(initialData.completed)
         ) {
           return {
             title: initialData.title || "",
             description: initialData.description || "",
-            dueDate: initialData.dueDate ? initialData.dueDate.slice(0, 10) : "",
+            dueDate: initialData.dueDate
+              ? initialData.dueDate.slice(0, 10)
+              : "",
             completed: Boolean(initialData.completed),
           };
         }
@@ -29,8 +33,13 @@ const TaskForm = ({ onSubmit, initialData = {}, buttonLabel }) => {
       });
     }
   }, [initialData]);
-  
-  
+
+  useEffect(() => {
+    socket.on("taskCreated", (newTask) => {
+    });
+
+    return () => socket.off("taskCreated");
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -94,7 +103,7 @@ const TaskForm = ({ onSubmit, initialData = {}, buttonLabel }) => {
         type="submit"
         className="w-full bg-[#897824] text-richblack-900 font-semibold py-2 rounded-lg hover:bg-[#ffd60a]"
       >
-        {buttonLabel} 
+        {buttonLabel}
       </button>
     </form>
   );

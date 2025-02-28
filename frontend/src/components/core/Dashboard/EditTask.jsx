@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getSingleTask, updateTask } from "../../../services/operations/taskAPI"; // Updated import with specific task fetch API
+import {
+  getSingleTask,
+  updateTask,
+} from "../../../services/operations/taskAPI";
 import TaskForm from "../../Common/TaskForm";
+import io from "socket.io-client";
+const socket = io("https://cultflow-mern.onrender.com");
 
 const EditTask = () => {
   const { id } = useParams();
   const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.profile)
+  const { user } = useSelector((state) => state.profile);
   const navigate = useNavigate();
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +20,7 @@ const EditTask = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const result = await getSingleTask(token, id); // Use specific API for single task fetching
+        const result = await getSingleTask(token, id);
         if (result?.success) {
           setTask(result.task);
         } else {
@@ -35,7 +40,12 @@ const EditTask = () => {
     try {
       const result = await updateTask(token, id, taskData);
       if (result?.success) {
-        navigate(user.accountType === "admin" ? "/dashboard/all-tasks" : "/dashboard/my-tasks");
+        socket.emit("taskUpdated", result.task);
+        navigate(
+          user.accountType === "admin"
+            ? "/dashboard/all-tasks"
+            : "/dashboard/my-tasks"
+        );
       } else {
         console.error("Failed to update task.");
       }
@@ -50,7 +60,11 @@ const EditTask = () => {
   return (
     <div>
       <h1 className="text-3xl font-medium text-richblack-5 mb-6">Edit Task</h1>
-      <TaskForm initialData={task} onSubmit={handleSubmit} buttonLabel={"UpdateTask"} />
+      <TaskForm
+        initialData={task}
+        onSubmit={handleSubmit}
+        buttonLabel={"UpdateTask"}
+      />
     </div>
   );
 };

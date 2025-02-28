@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client"; // Import Socket.io
 import TaskForm from "../../Common/TaskForm";
-import { createNewTask } from "../../../services/operations/taskAPI"; // Adjust the import path accordingly
+import { createNewTask } from "../../../services/operations/taskAPI";
+const socket = io(import.meta.env.VITE_BACKEND_URL);
 
 const AddTask = () => {
   const { token } = useSelector((state) => state.auth);
@@ -13,6 +15,8 @@ const AddTask = () => {
     const result = await createNewTask(token, taskData);
 
     if (result?.success) {
+      socket.emit("newTask", result.task);
+
       navigate(
         user.accountType === "admin"
           ? "/dashboard/all-tasks"

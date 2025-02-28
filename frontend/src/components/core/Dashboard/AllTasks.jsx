@@ -36,7 +36,10 @@ const AllTasks = () => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) setPage(newPage);
   };
-
+  
+  const handleDeleteSuccess = (deletedTaskId) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task._id !== deletedTaskId));
+  };
   return (
     <div>
       <div className="mb-14 flex items-center justify-between">
@@ -51,7 +54,7 @@ const AllTasks = () => {
 
       {tasks?.length ? (
         <>
-          <AdminTasksTable tasks={tasks} setTasks={setTasks} />
+          <AdminTasksTable tasks={tasks} setTasks={setTasks} onDeleteSuccess={handleDeleteSuccess} />
           
           {/* Pagination Controls */}
           {totalPages > 1 && (

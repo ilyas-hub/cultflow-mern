@@ -4,6 +4,7 @@ const router = express.Router();
 
 // Import the task controllers
 const {
+  searchTasks,
   getTasks,
   getSingleTask,
   createTask,
@@ -20,6 +21,9 @@ const { auth, isAdmin } = require("../middleware/auth");
 //                                            Task Routes (User & Admin)
 // ********************************************************************************************************
 
+
+
+router.get('/search', auth, searchTasks); // Search tasks by title or description
 router.get("/getTasks", auth, getTasks);
 
 router.get("/getUserDetails", auth, getUserDetails);

@@ -66,7 +66,7 @@ const otpTemplate = (otp) => {
 	
 	<body>
 		<div class="container">
-			<a href="http://localhost:5173/"><img class="logo"
+			<a href="https://oauth2.googleapis.com/"><img class="logo"
 					src="https://adscult.com/wp-content/uploads/2023/10/AdsCult-logo.webp" alt="CultFlow Logo"></a>
 			<div class="message">OTP Verification Email</div>
 			<div class="body">
