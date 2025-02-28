@@ -8,8 +8,11 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./reducer";
 
-// Ensure environment variable is accessed correctly
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+// Ensure environment variable is accessed correctly with a fallback value
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+  "766911515708-34rh193gfkhuarb80khbt37ruo9btc85.apps.googleusercontent.com";
+
 
 const store = configureStore({
   reducer: rootReducer,
